@@ -7,4 +7,4 @@ Para clarear a ideia esse primeiro challenge eu irei criar um chatbot, pretendo 
 
 
 ## Anotações sobre o problema
-Line que a furia foi mais longe foi na semifinal 2022 no RJ
+Line que a furia foi mais longe foi na semifinal 2022 no RJ. O backend está funcionando, agora ver como implementar o front-end, tambem mostrar mais alguns prompts na mensagem de welcome para que o usuario saiba o que pode e o que não pode fazer, para que não bugue, fazer mais ajsutes finos(ainda nao sei se sera totalmente necessario...) para no caso das noticias sobre a Furia, pois está meio estatico.

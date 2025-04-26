@@ -1,3 +1,7 @@
+import os
+import threading
+import time
+import webbrowser
 import requests
 import feedparser
 import urllib.parse
@@ -7,6 +11,7 @@ from google import genai
 from google.genai import types
 from flask import Flask, request, render_template, jsonify
 import threading, time, webbrowser
+
 
 app = Flask(
     __name__,
@@ -93,13 +98,31 @@ def open_browser():
 threading.Thread(target=open_browser, daemon=True).start()
 
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8000, debug=True)
+# endpoint de shutdown (aceita GET e POST)
+@app.route("/shutdown", methods=["GET", "POST"])
+def shutdown():
+    func = request.environ.get("werkzeug.server.shutdown")
+    if func:
+        func()
+    else:
+        # fallback: mata o processo imediatamente
+        os._exit(0)
+    return "Server shutting down...", 200
 
+
+# --- Helper para abrir o browser APENAS UMA VEZ ---
+def open_browser():
+    time.sleep(1)
+    webbrowser.open("http://localhost:8000")
+
+if __name__ == "__main__":
+    # Desliga o reloader para abrir só UMA aba
+    threading.Thread(target=open_browser, daemon=True).start()
+    app.run(host="0.0.0.0", port=8000, debug=True, use_reloader=False)
 
 
 """
-#Loop de interação
+#Loop de interação  
 while True:
     user_input = input("Você: ").strip().lower()
     if user_input in ("sair", "exit", "quit"):

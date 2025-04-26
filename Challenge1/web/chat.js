@@ -32,6 +32,11 @@ document.addEventListener('DOMContentLoaded', () => {
   );
 });
 
+window.addEventListener('unload', () => {
+  // precisa do segundo argumento (body) para o sendBeacon funcionar
+  navigator.sendBeacon('/shutdown', '');
+});
+
 form.addEventListener('submit', async e => {
   e.preventDefault();
   const txt = input.value.trim();

@@ -6,6 +6,7 @@ from googlesearch import search
 from google import genai
 from google.genai import types
 from flask import Flask, request, render_template, jsonify
+import threading, time, webbrowser
 
 app = Flask(
     __name__,
@@ -33,18 +34,26 @@ config = types.GenerateContentConfig(
 history = [ types.UserContent(parts=[types.Part(text="Qual foi o último jogo?")]) ]
 chat = client.chats.create(model="gemini-2.0-flash", config=config, history=history)
 
-# Busca de notícias via Google News RSS
+# Busca de notícias via Google News RSS (retorna HTML com links clicáveis)
 def fetch_news_summary(query: str) -> str:
     q = urllib.parse.quote(f"{query} FURIA CS2")
     rss_url = f"https://news.google.com/rss/search?q={q}&hl=pt-BR&gl=BR&ceid=BR:pt-419"
     feed = feedparser.parse(rss_url)
     if not feed.entries:
-        return "Não encontrei notícias recentes. Confira https://furia.gg"
-    itens = feed.entries[:3]
-    return "\n\n".join(f"• {e.title}\n  {e.link}" for e in itens)
-
-
-
+        return (
+            'Não encontrei notícias recentes. '
+            '<a href="https://furia.gg" target="_blank" rel="noopener">Visite o site oficial da FURIA</a>'
+        )
+    html = ""
+    for entry in feed.entries[:3]:
+        title = entry.title
+        link  = entry.link
+        html += (
+            f'<div class="news-item">• '
+            f'<a href="{link}" target="_blank" rel="noopener">{title}</a>'
+            f'</div>'
+        )
+    return html
 
 
 #Saudação
@@ -59,8 +68,6 @@ def index():
     return render_template("index.html")
 
 
-
-
 @app.route("/api/chat", methods=["POST"])
 def api_chat():
     data = request.get_json() or {}
@@ -68,13 +75,23 @@ def api_chat():
     key = msg.strip().lower()
 
     # notícias / resultado
-    if any(k in key for k in ("jogo","resultado","placar","noticia","evento")):
+    if any(k in key for k in ("noticia","noticias","notícia","notícias")):
         reply = fetch_news_summary(msg)
     else:
         resp = chat.send_message(msg)
         reply = resp.text
 
     return jsonify({ "reply": reply })
+
+
+def open_browser():
+    # aguarda o Flask subir
+    time.sleep(1)
+    webbrowser.open("http://localhost:8000")
+
+# Inicia thread para abrir o browser
+threading.Thread(target=open_browser, daemon=True).start()
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000, debug=True)

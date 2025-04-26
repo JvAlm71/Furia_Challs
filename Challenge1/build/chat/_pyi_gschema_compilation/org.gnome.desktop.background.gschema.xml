@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist gettext-domain="gsettings-desktop-schemas">
   <schema id="org.gnome.desktop.background" path="/org/gnome/desktop/background/">
+    <key name="draw-background" type="b">
+      <default>true</default>
+      <summary>Draw Desktop Background</summary>
+      <description>
+        Have GNOME draw the desktop background.
+
+        DEPRECATED: This key is deprecated and ignored.
+      </description>
+    </key>
     <key name="picture-options" enum="org.gnome.desktop.GDesktopBackgroundStyle">
       <default>'zoom'</default>
       <summary>Picture Options</summary>
@@ -11,16 +20,8 @@
       </description>
     </key>
     <key name="picture-uri" type="s">
-      <default>'file:///usr/share/backgrounds/gnome/adwaita-l.jpg'</default>
+      <default>'file:///usr/share/backgrounds/gnome/adwaita-timed.xml'</default>
       <summary>Picture URI</summary>
-      <description>
-        URI to use for the background image. Note that the backend only supports
-        local (file://) URIs.
-      </description>
-    </key>
-    <key name="picture-uri-dark" type="s">
-      <default>'file:///usr/share/backgrounds/gnome/adwaita-d.jpg'</default>
-      <summary>Picture URI (dark)</summary>
       <description>
         URI to use for the background image. Note that the backend only supports
         local (file://) URIs.

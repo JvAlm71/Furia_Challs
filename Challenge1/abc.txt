@@ -2,6 +2,7 @@ Key do meu bot:AIzaSyAOM2B1asxKdp1SFgid5ALvaCUTA2pqmH4
 
 No linux:
 pip install pyinstaller
+
 pyinstaller --onefile \
   --add-data "web:web" \
   chat.py
@@ -14,3 +15,10 @@ pyinstaller --onefile `
   --add-data "web;web" `
   chat.py
 # saída em dist/chat.exe
+
+Acessar o site:
+http://localhost:8000
+
+
+chmod +x run.sh      # só na primeira vez
+./run.sh             # cria venv, instala deps e executa chat.py

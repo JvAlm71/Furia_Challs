@@ -95,7 +95,7 @@ def open_browser():
     webbrowser.open("http://localhost:8000")
 
 # Inicia thread para abrir o browser
-threading.Thread(target=open_browser, daemon=True).start()
+#threading.Thread(target=open_browser, daemon=True).start()
 
 
 # endpoint de shutdown (aceita GET e POST)
@@ -119,23 +119,3 @@ if __name__ == "__main__":
     # Desliga o reloader para abrir só UMA aba
     threading.Thread(target=open_browser, daemon=True).start()
     app.run(host="0.0.0.0", port=8000, debug=True, use_reloader=False)
-
-
-"""
-#Loop de interação  
-while True:
-    user_input = input("Você: ").strip().lower()
-    if user_input in ("sair", "exit", "quit"):
-        print("Chatbot: Até a próxima! 💥")
-        break
-
-    # notícias / resultado
-    if any(k in user_input for k in ("jogo","jogos", "resultado","resultados", "placar", "noticia", "evento","noticias")):
-        print("Chatbot: Aqui vão as notícias mais recentes:")
-        print(fetch_news_summary(user_input))
-        continue
-
-    # fallback para Gemini
-    resp = chat.send_message(user_input)
-    print("Chatbot:", resp.text)
-"""

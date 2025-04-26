@@ -1,0 +1,16 @@
+Key do meu bot:AIzaSyAOM2B1asxKdp1SFgid5ALvaCUTA2pqmH4
+
+No linux:
+pip install pyinstaller
+pyinstaller --onefile \
+  --add-data "web:web" \
+  chat.py
+# saída em dist/chat
+
+
+no windows:
+pip install pyinstaller
+pyinstaller --onefile `
+  --add-data "web;web" `
+  chat.py
+# saída em dist/chat.exe

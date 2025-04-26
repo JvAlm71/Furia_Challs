@@ -5,6 +5,15 @@ from bs4 import BeautifulSoup
 from googlesearch import search
 from google import genai
 from google.genai import types
+from flask import Flask, request, render_template, jsonify
+
+app = Flask(
+    __name__,
+    static_folder="web",
+    static_url_path="",        # <- garante que /styles.css e /chat.js funcionem
+    template_folder="web"
+)
+
 
 #Configuração do chat Gemini
 client = genai.Client(api_key="AIzaSyAOM2B1asxKdp1SFgid5ALvaCUTA2pqmH4")
@@ -34,11 +43,45 @@ def fetch_news_summary(query: str) -> str:
     itens = feed.entries[:3]
     return "\n\n".join(f"• {e.title}\n  {e.link}" for e in itens)
 
+
+
+
+
 #Saudação
 welcome = "Olá! Eu sou o chatbot oficial da FURIA CS2. Pergunte o que quiser!"
 print("Chatbot:", welcome)
 chat.send_message(welcome)
 
+
+# --- Rotas Flask ---
+@app.route("/")
+def index():
+    return render_template("index.html")
+
+
+
+
+@app.route("/api/chat", methods=["POST"])
+def api_chat():
+    data = request.get_json() or {}
+    msg = data.get("message", "")
+    key = msg.strip().lower()
+
+    # notícias / resultado
+    if any(k in key for k in ("jogo","resultado","placar","noticia","evento")):
+        reply = fetch_news_summary(msg)
+    else:
+        resp = chat.send_message(msg)
+        reply = resp.text
+
+    return jsonify({ "reply": reply })
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=8000, debug=True)
+
+
+
+"""
 #Loop de interação
 while True:
     user_input = input("Você: ").strip().lower()
@@ -47,7 +90,7 @@ while True:
         break
 
     # notícias / resultado
-    if any(k in user_input for k in ("jogo", "resultado", "placar", "noticia", "evento")):
+    if any(k in user_input for k in ("jogo","jogos", "resultado","resultados", "placar", "noticia", "evento","noticias")):
         print("Chatbot: Aqui vão as notícias mais recentes:")
         print(fetch_news_summary(user_input))
         continue
@@ -55,3 +98,4 @@ while True:
     # fallback para Gemini
     resp = chat.send_message(user_input)
     print("Chatbot:", resp.text)
+"""

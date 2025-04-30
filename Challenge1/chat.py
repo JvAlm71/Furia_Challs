@@ -11,10 +11,16 @@ from google import genai
 from google.genai import types
 from flask import Flask, request, render_template, jsonify
 import threading, time, webbrowser
-from crewai_tools import ScrapeWebsiteTool
+from google.generativeai.types import GenerationConfig # Importar
+from urllib.request import urlopen, Request
+from web_scraping import get_furia_players, fetch_news_summary
 
+# Busca de noticias e jogadores da FURIA
+news = fetch_news_summary("furia cs2")
+player_names = get_furia_players()
 
-
+# Configuração do Flask
+# Cria a pasta web se não existir
 app = Flask(
     __name__,
     static_folder="web",
@@ -24,48 +30,23 @@ app = Flask(
 
 #Configuração do chat Gemini
 client = genai.Client(api_key="AIzaSyAOM2B1asxKdp1SFgid5ALvaCUTA2pqmH4")
+history = [ types.UserContent(parts=[types.Part(text="Qual foi o último jogo?")]) ]
 config = types.GenerateContentConfig(
     system_instruction=(
         "Você é o assistente oficial de fãs da FURIA Esports (CS2). "
         "Use uma linguagem fácil e acessivel, foque em notícias, escalações e estatísticas."
-        "Sempre comece o chat lembrando que é um assistente de fãs e não um bot de suporte."
         "Se não souber a resposta, diga que não tem certeza e sugira verificar o site oficial da FURIA."
         "Evite falar sobre outros jogos ou temas que não sejam CS2."
         "Se o usuário perguntar sobre outros jogos, diga que você é especializado em CS2 e não pode ajudar com isso."
         "Se mantenha atualizado sobre as últimas notícias e eventos da FURIA."
         "Para as perguntas relacionadas a jogo, resultado, placar, noticia, evento,além de mostrar a noticia, de uma breve comentada."
-    )
+        "Mostre entusiasmo pelas conquistas da FURIA!"
+        "Lembre que voce é um assistente de fãs, não um bot de suporte técnico ou vendas."
+    ),
+    temperature=0.5,
 )
 
-history = [ types.UserContent(parts=[types.Part(text="Qual foi o último jogo?")]) ]
 chat = client.chats.create(model="gemini-2.0-flash", config=config, history=history)
-
-# Busca de notícias via Google News RSS (retorna HTML com links clicáveis)
-def fetch_news_summary(query: str) -> str:
-    q = urllib.parse.quote(f"{query} FURIA CS2")
-    rss_url = f"https://news.google.com/rss/search?q={q}&hl=pt-BR&gl=BR&ceid=BR:pt-419"
-    feed = feedparser.parse(rss_url)
-    if not feed.entries:
-        return (
-            'Não encontrei notícias recentes. '
-            '<a href="https://furia.gg" target="_blank" rel="noopener">Visite o site oficial da FURIA</a>'
-        )
-    html = ""
-    for entry in feed.entries[:3]:
-        title = entry.title
-        link  = entry.link
-        html += (
-            f'<div class="news-item">• '
-            f'<a href="{link}" target="_blank" rel="noopener">{title}</a>'
-            f'</div>'
-        )
-    return html
-
-
-#Saudação
-welcome = "Olá! Eu sou o chatbot oficial da FURIA CS2. Pergunte o que quiser!"
-print("Chatbot:", welcome)
-chat.send_message(welcome)
 
 
 # --- Rotas Flask ---
@@ -80,14 +61,23 @@ def api_chat():
     msg = data.get("message", "")
     key = msg.strip().lower()
 
-    # notícias / resultado
-    if any(k in key for k in ("noticia","noticias","notícia","notícias")):
+    if any(k in key for k in ("escalacao","escalação","formacao","formação","lineup","roster","line-up")):
+        escala = ", ".join(player_names)
+        # Peça ao Gemini um comentário sobre o time, usando o input do usuário
+        prompt = (
+            f"Usuário pediu a escalação e um comentário: '{msg}'. "
+            f"A escalação é: {escala}. "
+            "Faça um comentário breve e empolgado sobre o time e a escalação."
+        )
+        resp = chat.send_message(prompt)
+        reply = f"A formação atual da FURIA é: {escala}<br><br>{resp.text}"
+    elif any(k in key for k in ("noticia","noticias","notícia","notícias")):
         reply = fetch_news_summary(msg)
     else:
         resp = chat.send_message(msg)
         reply = resp.text
 
-    return jsonify({ "reply": reply })
+    return jsonify({"reply": reply})
 
 
 def open_browser():
@@ -120,23 +110,3 @@ if __name__ == "__main__":
     # Desliga o reloader para abrir só UMA aba
     threading.Thread(target=open_browser, daemon=True).start()
     app.run(host="0.0.0.0", port=8000, debug=True, use_reloader=False)
-
-
-"""
-#Loop de interação  
-while True:
-    user_input = input("Você: ").strip().lower()
-    if user_input in ("sair", "exit", "quit"):
-        print("Chatbot: Até a próxima! 💥")
-        break
-
-    # notícias / resultado
-    if any(k in user_input for k in ("jogo","jogos", "resultado","resultados", "placar", "noticia", "evento","noticias")):
-        print("Chatbot: Aqui vão as notícias mais recentes:")
-        print(fetch_news_summary(user_input))
-        continue
-
-    # fallback para Gemini
-    resp = chat.send_message(user_input)
-    print("Chatbot:", resp.text)
-"""

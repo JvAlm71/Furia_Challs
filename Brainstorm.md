@@ -14,3 +14,16 @@ Att 26/04:
 Ate aqui o front ta visivel, o chat.py funcionando bonito e os links tao daora, entretanto, ainda preciso fazer com que o front-end fique mais amigavel e fazer com que isso rode em qualquer maquina
 
 preferencialmente que rode em qualquer maquina...
+
+
+
+
+
+# Challenge 2
+
+A ideia para esse ta sendo, colocar as informações do questionario em um arquivo, ou posteriormente em algo mais bonito de ver, mas ja ta vale. Apos isso, ao querer fazer o reconhecimento facil, pegar o cpf da pessoa primeiro, ou seja carrega o documento do banco de dados e eu possa selecionar os cpfs cadastrados, apos isso eu pego e posso escolher uma foto do rosto para que associe a foto com o cpf, para o reconhecimento facial associar a isso.
+
+## Aqui vai ser mais dificil...
+Após tudo isso, fazer o scraping no meu twitter, para reconhecer padroes entre outros aspectos para coletar informações importantes sobre mim. Pegar coisas curtidas... usar palavras chaves para buscar em meu twitter...
+https://www.reddit.com/r/datasets/comments/koloc9/how_to_scrape_twitter_data_and_do_a_sentiment/?tl=pt-br&rdt=52837
+Apos isso fazer sugestoes de conteudos relacionados a furia e E-sports para mim, de acordo com o que o scraping mostrou que eu gosto...

@@ -1,0 +1,4 @@
+Primeiro, coletar informações do usuario, depois upar uma foto para reconhecimento, usar i.a para isso
+apos tudo isso, começar o web_scraping e associar meus dados ao meu rosto e minhas informaçoes
+depois disso, baseando-se nessa ideia, tentar ver como recomendar as coisas param mim, de acordo com o que foi coletado.
+

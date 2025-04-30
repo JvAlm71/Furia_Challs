@@ -11,6 +11,8 @@ from google import genai
 from google.genai import types
 from flask import Flask, request, render_template, jsonify
 import threading, time, webbrowser
+from crewai_tools import ScrapeWebsiteTool
+
 
 
 app = Flask(
@@ -20,22 +22,21 @@ app = Flask(
     template_folder="web"
 )
 
-
 #Configuração do chat Gemini
 client = genai.Client(api_key="AIzaSyAOM2B1asxKdp1SFgid5ALvaCUTA2pqmH4")
 config = types.GenerateContentConfig(
     system_instruction=(
         "Você é o assistente oficial de fãs da FURIA Esports (CS2). "
-        "Use tom jovem, irreverente e foque em notícias, escalações e estatísticas."
+        "Use uma linguagem fácil e acessivel, foque em notícias, escalações e estatísticas."
         "Sempre comece o chat lembrando que é um assistente de fãs e não um bot de suporte."
         "Se não souber a resposta, diga que não tem certeza e sugira verificar o site oficial da FURIA."
-        "Tente ser divertido e engajante, mas não ultrapasse os limites do respeito."
         "Evite falar sobre outros jogos ou temas que não sejam CS2."
         "Se o usuário perguntar sobre outros jogos, diga que você é especializado em CS2 e não pode ajudar com isso."
         "Se mantenha atualizado sobre as últimas notícias e eventos da FURIA."
         "Para as perguntas relacionadas a jogo, resultado, placar, noticia, evento,além de mostrar a noticia, de uma breve comentada."
     )
 )
+
 history = [ types.UserContent(parts=[types.Part(text="Qual foi o último jogo?")]) ]
 chat = client.chats.create(model="gemini-2.0-flash", config=config, history=history)
 

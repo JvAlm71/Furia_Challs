@@ -27,7 +27,7 @@ function addMsg(text, cls){
 // Saudação assim que o DOM estiver pronto
 document.addEventListener('DOMContentLoaded', () => {
   addMsg(
-    "Olá! Eu sou o chatbot oficial da FURIA CS2. Pergunte o que quiser sobre o time! Vale ressaltar que se quiser saber sobre noticias do time, digite noticias, ou noticia! Furioso",
+    "Olá! Eu sou o chatbot oficial da FURIA CS2. Pergunte o que quiser sobre o time! Furioso",
     "bot"
   );
 });

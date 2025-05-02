@@ -1,0 +1,13 @@
+# .gitignore
+
+# Ambiente virtual Python
+.venv/
+*.pyc
+__pycache__/
+
+# Arquivo de segredos
+.env  # <--- Adicione esta linha!
+
+# Outros arquivos específicos do OS ou IDE (opcional)
+.DS_Store
+*.vscode/

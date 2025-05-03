@@ -1,0 +1,11 @@
+# .gitignore
+
+.venv/
+*.pyc
+__pycache__/
+
+# Arquivo de segredos
+.env  # <--- Adicione esta linha!
+
+.DS_Store
+*.vscode/

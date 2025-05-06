@@ -1,0 +1,2 @@
+/Challenge1/.env      # ignora o .env na pasta Challenge1
+/Challenge1Linux/.env # ignora o .env na pasta Challenge1Linux

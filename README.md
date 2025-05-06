@@ -102,7 +102,7 @@ Durante o desenvolvimento ou em uma evolução deste projeto, diversas alternati
 
 ## 5. Instruções de Instalação e Execução
 
-Estas instruções assumem um ambiente Linux/Unix-like com Python 3 e `pip` instalados.
+Estas instruções assumem um ambiente Linux/Unix-like com Python 3 e `pip` instalados, IMPORTANTE, execute no terminal nativo do Linux, não execute no Terminal do VSCODE ou de outras IDLE, pode dar conflitos.
 
 1.  **Clone o Repositório:**
     ```bash

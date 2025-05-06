@@ -47,7 +47,6 @@ Com base na análise do código e do objetivo do projeto, podemos definir os seg
     * **Flask (`flask>=3.1.0`):** Microframework web para criar o servidor backend, rotear requisições HTTP e renderizar a interface inicial.
     * **Google Generative AI SDK (`google-genai>=1.11.0`):** Biblioteca oficial para interagir com a API do Google Gemini, permitindo enviar prompts, gerenciar histórico (implicitamente pelo objeto `chat`) e receber respostas do LLM.
     * **Beautiful Soup 4 (`beautifulsoup4>=4.10.0`):** Biblioteca para parsing de HTML e XML. Utilizada em `web_scraping.py` para extrair os nomes dos jogadores da página HTML do HLTV.
-    * **Requests (`requests>=2.32.3`):** Biblioteca para realizar requisições HTTP (embora `urllib.request` da biblioteca padrão Python seja usada em `web_scraping.py`, `requests` está listada e é uma alternativa comum e robusta).
     * **Feedparser (`feedparser>=6.0.11`):** Biblioteca para fazer o parsing de feeds RSS e Atom, usada para obter e processar as notícias do Google News.
     * **Urllib (`urllib.request`, `urllib.parse`):** Módulos nativos do Python utilizados para abrir URLs (fazer requisições HTTP básicas) e codificar parâmetros de URL (para a busca no Google News).
     * **Bibliotecas Padrão:** `os`, `threading`, `time`, `webbrowser` para funcionalidades do sistema operacional, execução paralela leve (abrir browser), pausas e controle do navegador.
@@ -83,7 +82,6 @@ Challenge1Linux/
 Durante o desenvolvimento ou em uma evolução deste projeto, diversas alternativas poderiam ser consideradas:
 
 * **Web Scraping:**
-    * **Biblioteca:** `Requests` poderia ser usada em vez de `urllib.request` para uma API de requisições HTTP mais alto nível e com mais recursos (como gerenciamento de sessão).
     * **Robustez:** Se o HLTV utilizasse JavaScript para carregar dados dinamicamente, `BeautifulSoup` sozinho não seria suficiente. Ferramentas como `Selenium` (automatiza um navegador real) ou `Playwright` seriam necessárias, embora adicionem complexidade e dependências.
     * **Framework:** Para scraping mais complexo ou em maior escala, o framework `Scrapy` oferece uma estrutura mais completa com pipelines, middlewares e gerenciamento de requisições assíncronas.
 * **Orquestração da Lógica do Chat:**
